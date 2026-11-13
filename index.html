@@ -133,6 +133,14 @@
     .plan-list li{font-size:.75rem;color:#aaa;line-height:1.5;padding-left:16px;position:relative;margin-bottom:4px}
     .plan-list li::before{content:'›';position:absolute;left:3px;color:#B22020;font-weight:700}
     .plan-note{font-size:.66rem;color:#555;text-align:center;line-height:1.5;margin-top:6px}
+    .plan-opts{display:none;margin-top:12px;border-top:1px solid #2a2a2a;padding-top:12px}
+    .plan-opts.open{display:block}
+    .plan-opts-title{font-size:.68rem;color:#888;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+    .plan-opt{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#111;border:1px solid #2a2a2a;border-radius:8px;color:#fff;font-family:'Inter',sans-serif;padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:border-color .15s;text-align:left}
+    .plan-opt:hover{border-color:#B22020}
+    .plan-opt:last-child{margin-bottom:0}
+    .plan-opt-name{font-size:.8rem;font-weight:700}
+    .plan-opt-price{font-size:.8rem;font-weight:700;color:#B22020;white-space:nowrap}
   </style>
 </head>
 <body>
@@ -313,6 +321,7 @@
           <li>Suporte limitado para dúvidas pontuais</li>
         </ul>
         <button class="sbtn" style="margin-top:0" onclick="assinar('essencial')">Quero o Essencial</button>
+        <div class="plan-opts" id="opts-essencial"></div>
       </div>
 
       <div class="plan-card destaque">
@@ -325,6 +334,7 @@
           <li>Análise de execução e reavaliação</li>
         </ul>
         <button class="sbtn" style="margin-top:0" onclick="assinar('premium')">Quero o Premium</button>
+        <div class="plan-opts" id="opts-premium"></div>
       </div>
 
       <div class="plan-card">
@@ -522,16 +532,28 @@ ${motivo}`;
     }
 
     // ── PLANOS (KIWIFY) ───────────────────────────────────────
-    // Cole aqui os links de checkout de cada plano (Kiwify > Produtos > Links).
-    // Enquanto um link estiver vazio, o botão abre o WhatsApp com o plano escolhido.
+    // Links de checkout de cada plano e período (Kiwify > Produtos > Links).
+    // Plano sem opções cadastradas abre o WhatsApp com o plano escolhido.
     const KIWIFY = {
-      essencial:   '',
-      premium:     '',
-      performance: ''
+      essencial: [
+        { nome: 'Mensal',     preco: 'R$ 147',   link: 'https://pay.kiwify.com.br/vj3LUKa' },
+        { nome: 'Trimestral', preco: 'R$ 397',   link: 'https://pay.kiwify.com.br/xbU9dtB' },
+        { nome: 'Semestral',  preco: 'R$ 747',   link: 'https://pay.kiwify.com.br/RbXMfnY' }
+      ],
+      premium: [
+        { nome: 'Mensal',     preco: 'R$ 247',   link: 'https://pay.kiwify.com.br/8Ze43h8' },
+        { nome: 'Trimestral', preco: 'R$ 667',   link: 'https://pay.kiwify.com.br/lmZ4ejq' },
+        { nome: 'Semestral',  preco: 'R$ 1.247', link: 'https://pay.kiwify.com.br/ZYmRvYv' }
+      ],
+      performance: []
     };
     const NOMES_PLANO = { essencial: 'Essencial', premium: 'Premium', performance: 'Performance' };
 
+    function fecharOpcoes() {
+      document.querySelectorAll('.plan-opts').forEach(function (el) { el.classList.remove('open'); });
+    }
     function openPlanos() {
+      fecharOpcoes();
       document.getElementById('planos-overlay').classList.add('open');
       document.body.style.overflow = 'hidden';
     }
@@ -540,13 +562,23 @@ ${motivo}`;
       document.body.style.overflow = '';
     }
     function assinar(plano) {
-      const link = KIWIFY[plano];
-      if (link) {
-        window.open(link, '_blank');
-      } else {
+      const opcoes = KIWIFY[plano] || [];
+      const box = document.getElementById('opts-' + plano);
+      if (!opcoes.length || !box) {
         const msg = 'Olá Caio! Tenho interesse no plano ' + NOMES_PLANO[plano] + ' da consultoria CK Performance.';
         window.open('https://wa.me/5547999286679?text=' + encodeURIComponent(msg), '_blank');
+        return;
       }
+      const jaAberto = box.classList.contains('open');
+      fecharOpcoes();
+      if (jaAberto) return;
+      box.innerHTML = '<div class="plan-opts-title">Escolha o período</div>' + opcoes.map(function (o) {
+        return '<button class="plan-opt" onclick="window.open(\'' + o.link + '\', \'_blank\')">' +
+               '<span class="plan-opt-name">' + o.nome + '</span>' +
+               '<span class="plan-opt-price">' + o.preco + '</span></button>';
+      }).join('');
+      box.classList.add('open');
+      box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   </script>
 
