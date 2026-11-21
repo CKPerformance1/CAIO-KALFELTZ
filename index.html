@@ -164,6 +164,7 @@
     .testis{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px;margin-inline:-16px;padding-inline:16px}
     .testi{flex:0 0 82%;scroll-snap-align:start;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px}
     .testi q{font-size:.82rem;line-height:1.6;color:#e6dfdf;quotes:"“" "”"}
+    .testi-img{width:100%;max-height:420px;object-fit:contain;border-radius:10px;background:#0f0d0d}
     .testi-who{font-size:.72rem;color:var(--muted)}
     .testi-who b{color:#fff}
     .testi-res{align-self:flex-start;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:rgba(178,32,32,.18);color:#ff8080;border-radius:99px;padding:4px 10px}
@@ -429,6 +430,7 @@
       <div class="faq reveal">
         <details><summary>Qual plano devo escolher?</summary><div class="ans"><b>Essencial</b> para quem quer começar com um plano certo. <b>Premium</b> para quem quer evoluir com check-ins quinzenais e ajustes a cada ciclo. <b>Performance</b> para o máximo de personalização, com check-in semanal e análise de vídeo recorrente.</div></details>
         <details><summary>Por que o plano semestral sai mais barato?</summary><div class="ans">Resultado vem de consistência. No semestral você paga menos por mês e a gente tem tempo para ajustar o treino ciclo a ciclo, em vez de recomeçar a cada mês.</div></details>
+        <details><summary>Em quanto tempo recebo meu treino?</summary><div class="ans">Em até 7 dias depois que eu receber sua anamnese e suas fotos.</div></details>
         <details><summary>Sou iniciante. Serve para mim?</summary><div class="ans">Sim. O planejamento parte do seu nível atual, que eu levanto na avaliação inicial.</div></details>
         <details><summary>A consultoria inclui dieta?</summary><div class="ans">Não. A consultoria é focada em treino. Não inclui prescrição de dieta.</div></details>
         <details><summary>Tem garantia?</summary><div class="ans">Sim, garantia de 7 dias. A consultoria não inclui garantia de resultado físico, porque ele depende também da sua execução e rotina.</div></details>
@@ -651,11 +653,12 @@
 
     // Prazo de entrega do protocolo depois de receber anamnese e fotos.
     // Ex.: '3 dias úteis'. Deixe '' para não mostrar prazo no site.
-    const PRAZO_PROTOCOLO = '';
+    const PRAZO_PROTOCOLO = '7 dias';
 
     // Depoimentos reais de alunos (com autorização). A seção "Resultados"
-    // só aparece quando houver pelo menos um item. Exemplo de formato:
+    // só aparece quando houver pelo menos um item. Pode ser texto ou print:
     // { nome: 'Ana, 32', texto: 'O que a pessoa disse...', resultado: '-6 kg em 12 semanas' }
+    // { nome: 'Ana, 32', imagem: 'assets/depoimentos/ana.jpg', resultado: '-6 kg em 12 semanas' }
     const DEPOIMENTOS = [];
 
     // Links de checkout de cada plano e período (Kiwify > Produtos > Links).
@@ -863,7 +866,12 @@ ${motivo}`;
         DEPOIMENTOS.forEach(d => {
           const card = document.createElement('figure');
           card.className = 'testi';
-          const q = document.createElement('q'); q.textContent = d.texto; card.appendChild(q);
+          if (d.imagem) {
+            const img = document.createElement('img');
+            img.src = d.imagem; img.alt = 'Feedback de ' + d.nome; img.loading = 'lazy'; img.className = 'testi-img';
+            card.appendChild(img);
+          }
+          if (d.texto) { const q = document.createElement('q'); q.textContent = d.texto; card.appendChild(q); }
           if (d.resultado) { const r = document.createElement('span'); r.className = 'testi-res'; r.textContent = d.resultado; card.appendChild(r); }
           const who = document.createElement('figcaption'); who.className = 'testi-who';
           const b = document.createElement('b'); b.textContent = d.nome; who.appendChild(b);
