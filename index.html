@@ -167,6 +167,25 @@
     .testi::before{content:"“";position:absolute;top:-18px;right:10px;font-family:var(--display);font-size:7rem;font-weight:800;color:var(--red);opacity:.25;line-height:1}
     .testi-txt{font-size:.82rem;line-height:1.6;color:#e6dfdf;white-space:pre-line;margin:0;position:relative}
     .hl{color:var(--red-hi)}
+    .case{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:14px}
+    .case::before{content:"";position:absolute;inset:-40% -20% auto;height:70%;background:radial-gradient(closest-side,rgba(178,32,32,.35),transparent);pointer-events:none}
+    .case-head{position:relative;display:flex;flex-direction:column;gap:8px}
+    .case-tag{align-self:flex-start;font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:var(--red);color:#fff;padding:5px 10px;border-radius:99px}
+    .case-title{font-family:var(--display);font-size:1.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.02em;line-height:1}
+    .ba{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .ba figure{margin:0;border-radius:10px;overflow:hidden;border:2px solid #3a3333;aspect-ratio:480/606;background:#111}
+    .ba figure.now{border-color:var(--red);animation:glowPulse 2.8s ease-in-out infinite}
+    .ba img{width:100%;height:100%;object-fit:cover}
+    @keyframes glowPulse{0%,100%{box-shadow:0 0 0 0 rgba(226,58,58,0)}50%{box-shadow:0 0 22px 2px rgba(226,58,58,.45)}}
+    .js .case .ba figure{opacity:0;transform:translateX(-26px);transition:opacity .8s .25s ease,transform .8s .25s cubic-bezier(.2,.8,.2,1)}
+    .js .case .ba figure.now{transform:translateX(26px);transition-delay:.5s}
+    .js .case.in .ba figure{opacity:1;transform:none}
+    .case-facts{position:relative;display:flex;flex-direction:column;gap:8px}
+    .case-facts div{display:grid;grid-template-columns:78px minmax(0,1fr);gap:10px;align-items:baseline;background:var(--card-2);border-radius:10px;padding:10px 12px}
+    .case-facts span{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--red-hi)}
+    .case-facts p{font-size:.8rem;color:#d9d1d1;line-height:1.5}
+    .case-quote{position:relative;margin:0;font-size:.9rem;line-height:1.6;color:#f1ecec;font-weight:500;border-left:3px solid var(--red);padding-left:12px}
+    .case-quote cite{display:block;font-style:normal;font-weight:400;font-size:.72rem;color:var(--muted);margin-top:8px}
     .testi-nav{display:flex;justify-content:space-between;align-items:center;gap:12px}
     .testi-hint{font-size:.68rem;color:var(--dim);letter-spacing:.04em}
     .testi-dots{display:flex;gap:6px}
@@ -285,6 +304,7 @@
       html{scroll-behavior:auto}
       .js .reveal{opacity:1;transform:none}
       .steps::after{height:calc(100% - 52px)}
+      .js .case .ba figure{opacity:1;transform:none}
     }
   </style>
 </head>
@@ -399,6 +419,24 @@
         <div class="eyebrow">Feedbacks reais</div>
         <h2 class="block-title">O que dizem <span class="hl">meus alunos</span></h2>
       </div>
+      <article class="case reveal">
+        <div class="case-head">
+          <span class="case-tag">Caso real · 3 meses</span>
+          <h3 class="case-title">O Davi achava que <span class="hl">nunca conseguiria</span></h3>
+        </div>
+        <div class="ba">
+          <figure><img src="assets/depoimentos/davi-inicio.jpg" alt="Davi no início, de costas, fazendo pose de bíceps" loading="lazy" width="480" height="606"/></figure>
+          <figure class="now"><img src="assets/depoimentos/davi-hoje.jpg" alt="Davi 3 meses depois, de costas, com as costas mais desenvolvidas" loading="lazy" width="480" height="606"/></figure>
+        </div>
+        <div class="case-facts">
+          <div><span>O desafio</span><p>Convive há 20 anos com anemia falciforme, uma doença hereditária e sem cura.</p></div>
+          <div><span>A rotina</span><p>Aulas de guitarra, trabalho das 15h às 23h e shows em igrejas, pubs e eventos nos fins de semana.</p></div>
+          <div><span>O treino</span><p>Adaptado à rotina e ao físico dele, respeitando os hábitos alimentares.</p></div>
+        </div>
+        <blockquote class="case-quote">“Pensava que por conta da minha condição nunca conseguiria fazer ‘força’ e ter um físico bem montado, mas junto com o Caio percebi que estava enganado e tenho evoluído minha saúde, físico e psicológico todos os dias.”<cite>Davi, aluno da CK Performance</cite></blockquote>
+        <button class="btn btn-primary btn-block" type="button" onclick="openPlanos()">Quero começar minha evolução →</button>
+      </article>
+      <div class="eyebrow reveal" style="margin-top:6px">Mais feedbacks</div>
       <div class="testis reveal" id="testis"></div>
       <div class="testi-nav reveal"><span class="testi-hint">Arraste para o lado →</span><span class="testi-dots" id="testi-dots"></span></div>
     </section>
@@ -443,6 +481,7 @@
         <details><summary>Por que o plano semestral sai mais barato?</summary><div class="ans">Resultado vem de consistência. No semestral você paga menos por mês e a gente tem tempo para ajustar o treino ciclo a ciclo, em vez de recomeçar a cada mês.</div></details>
         <details><summary>Em quanto tempo recebo meu treino?</summary><div class="ans">Em até 7 dias depois que eu receber sua anamnese e suas fotos.</div></details>
         <details><summary>Sou iniciante. Serve para mim?</summary><div class="ans">Sim. O planejamento parte do seu nível atual, que eu levanto na avaliação inicial.</div></details>
+        <details><summary>Tenho uma condição de saúde ou lesão. Posso treinar?</summary><div class="ans">Na anamnese você me conta suas condições e as orientações médicas que recebeu, e o treino é montado respeitando isso. Quando for o caso, peço liberação do seu médico antes de começar.</div></details>
         <details><summary>A consultoria inclui dieta?</summary><div class="ans">Não. A consultoria é focada em treino. Não inclui prescrição de dieta.</div></details>
         <details><summary>Tem garantia?</summary><div class="ans">Sim, garantia de 7 dias. A consultoria não inclui garantia de resultado físico, porque ele depende também da sua execução e rotina.</div></details>
         <details><summary>Qual a diferença para a planilha gratuita?</summary><div class="ans">A planilha é um modelo pronto que você segue sozinho. Na consultoria eu monto o treino para você, acompanho e ajusto conforme a sua evolução.</div></details>
