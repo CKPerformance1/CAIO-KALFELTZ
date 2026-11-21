@@ -276,7 +276,16 @@
     .plan-list{list-style:none;margin-bottom:14px}
     .plan-list li{font-size:.76rem;color:#b5adad;line-height:1.5;padding-left:16px;position:relative;margin-bottom:4px}
     .plan-list li::before{content:'›';position:absolute;left:3px;color:var(--red-hi);font-weight:700}
-    .plan-bonus{font-size:.72rem;color:#ffd0d0;background:rgba(178,32,32,.14);border-radius:8px;padding:8px 10px;margin:-4px 0 12px}
+    .plan-bonus-title{font-family:var(--display);font-size:1rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+    .plan-bonus-row{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-top:1px dashed rgba(255,255,255,.1);font-size:.74rem}
+    .plan-bonus-row span{color:#cbbaba}
+    .plan-bonus-row b{color:#fff;font-weight:700;text-align:right}
+    .plan-bonus-row b.none{color:var(--dim);font-weight:500}
+    .plan-excl{margin-top:8px;font-size:.66rem;font-weight:700;letter-spacing:.04em;color:#ffd36b;background:#3a2f12;border-radius:6px;padding:6px 8px}
+    .plan-bonus-note{margin-top:6px;font-size:.66rem;color:var(--muted)}
+    .plan-opt-bonus{font-size:.68rem;font-weight:600;color:#ffd36b}
+    .plan-opt-bonus.none{color:var(--dim);font-weight:500}
+    .plan-bonus{font-size:.72rem;color:#ffd0d0;background:rgba(178,32,32,.12);border:1px solid rgba(226,58,58,.25);border-radius:10px;padding:10px 12px;margin:-4px 0 12px}
     .plan-note{font-size:.68rem;color:#666;text-align:center;line-height:1.5;margin-top:10px}
     .plan-opts{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}
     .plan-opts.open{grid-template-rows:1fr}
@@ -485,7 +494,7 @@
         <details><summary>A consultoria inclui dieta?</summary><div class="ans">Não. A consultoria é focada em treino. Não inclui prescrição de dieta.</div></details>
         <details><summary>Tem garantia?</summary><div class="ans">Sim, garantia de 7 dias. A consultoria não inclui garantia de resultado físico, porque ele depende também da sua execução e rotina.</div></details>
         <details><summary>Qual a diferença para a planilha gratuita?</summary><div class="ans">A planilha é um modelo pronto que você segue sozinho. Na consultoria eu monto o treino para você, acompanho e ajusto conforme a sua evolução.</div></details>
-        <details><summary>O que é o bônus do plano semestral?</summary><div class="ans">Nos planos Essencial e Premium semestrais você ganha 1 treino presencial comigo em Balneário Camboriú. Se você mora longe, troca por uma call de 30 minutos.</div></details>
+        <details><summary>Quais são os bônus de cada plano?</summary><div class="ans"><b>Essencial:</b> 3 calls de acompanhamento no trimestral e 6 no semestral (1 por mês). O mensal não tem bônus.<br><br><b>Premium:</b> as mesmas calls (3 no trimestral, 6 no semestral) e, com exclusividade, aulas presenciais comigo em Balneário Camboriú: 1 no mensal, 3 no trimestral e 6 no semestral.</div></details>
         <details><summary>Atende presencialmente?</summary><div class="ans">Sim, em Balneário Camboriú: R. 1301, 471, Centro. Agende pelo WhatsApp.</div></details>
       </div>
     </section>
@@ -739,12 +748,21 @@
       performance: []
     };
 
-    // Bônus exclusivos de cada plano (aparecem no card). Deixe '' para esconder.
-    // Ex.: 'Bônus no semestral: 1 call de 30 min para revisar seu treino'
+    // Bônus de cada plano, por período (meses: quantidade). 0 = sem esse bônus.
+    // "exclusivo: true" mostra o selo de exclusividade do plano.
+    const BONUS_TIPOS = {
+      call: { um: 'call de acompanhamento',            varios: 'calls de acompanhamento' },
+      aula: { um: 'aula presencial em Balneário Camboriú', varios: 'aulas presenciais em Balneário Camboriú' }
+    };
     const BONUS = {
-      essencial:   'Bônus no semestral: 1 treino presencial comigo em Balneário Camboriú (ou uma call de 30 min, se você mora longe)',
-      premium:     'Bônus no semestral: 1 treino presencial comigo em Balneário Camboriú (ou uma call de 30 min, se você mora longe)',
-      performance: ''
+      essencial: [
+        { tipo: 'call', qtd: { 1: 0, 3: 3, 6: 6 } }
+      ],
+      premium: [
+        { tipo: 'call', qtd: { 1: 0, 3: 3, 6: 6 } },
+        { tipo: 'aula', qtd: { 1: 1, 3: 3, 6: 6 }, exclusivo: true }
+      ],
+      performance: []
     };
 
     const NOMES_PLANO = { essencial: 'Essencial', premium: 'Premium', performance: 'Performance' };
@@ -754,6 +772,16 @@
 
     const brl = v => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: v % 1 ? 2 : 0, maximumFractionDigits: 2 });
     const porMes = o => o.valor / o.meses;
+    function bonusItens(plano, meses) {
+      return (BONUS[plano] || []).map(b => ({ ...b, n: b.qtd[meses] || 0 })).filter(b => b.n > 0);
+    }
+    function bonusTexto(plano, meses, curto) {
+      return bonusItens(plano, meses).map(b => {
+        const t = BONUS_TIPOS[b.tipo];
+        const nome = curto ? (b.tipo === 'call' ? (b.n > 1 ? 'calls' : 'call') : (b.n > 1 ? 'aulas presenciais' : 'aula presencial')) : (b.n > 1 ? t.varios : t.um);
+        return b.n + ' ' + nome;
+      }).join(' + ');
+    }
     function opcoesOrdenadas(plano) {
       return (KIWIFY[plano] || []).slice().sort((a, b) => b.meses - a.meses);
     }
@@ -890,12 +918,13 @@ ${motivo}`;
       box.firstElementChild.innerHTML = '<div class="plan-opts-title">Escolha o período</div>' + opcoes.map((o, i) => {
         const eco = economia(plano, o);
         const tags = (i === 0 && opcoes.length > 1 ? '<span class="plan-opt-best">Melhor custo-benefício</span>' : '') +
-                     (i === 0 && BONUS[plano] ? '<span class="plan-opt-gift">🎁 Com bônus</span>' : '') +
                      (eco > 0 ? '<span class="plan-opt-save">Economize ' + eco + '%</span>' : '');
         const total = o.meses > 1 ? 'Total ' + brl(o.valor) + ' por ' + o.meses + ' meses' : 'Renovação mês a mês';
         return '<a class="plan-opt' + (i === 0 && opcoes.length > 1 ? ' best' : '') + '" href="' + o.link + '" target="_blank" rel="noopener">' +
                '<span class="plan-opt-l"><span class="plan-opt-name">' + o.nome + ' ' + tags + '</span>' +
-               '<span class="plan-opt-total">' + total + '</span></span>' +
+               '<span class="plan-opt-total">' + total + '</span>' +
+               (bonusTexto(plano, o.meses) ? '<span class="plan-opt-bonus">🎁 ' + bonusTexto(plano, o.meses, true) + '</span>' : '<span class="plan-opt-bonus none">Sem bônus</span>') +
+               '</span>' +
                '<span class="plan-opt-price"><b>' + brl(porMes(o)) + '</b>por mês</span></a>';
       }).join('');
       box.classList.add('open');
@@ -916,7 +945,16 @@ ${motivo}`;
           el.innerHTML = 'sob consulta<b>Vagas limitadas</b>';
         }
         const bonus = document.getElementById('bonus-' + plano);
-        if (BONUS[plano]) { bonus.textContent = '🎁 ' + BONUS[plano]; bonus.hidden = false; }
+        if ((BONUS[plano] || []).length) {
+          const per = ops.length ? ops : [{ nome: 'Semestral', meses: 6 }, { nome: 'Trimestral', meses: 3 }, { nome: 'Mensal', meses: 1 }];
+          const excl = (BONUS[plano] || []).filter(b => b.exclusivo);
+          bonus.innerHTML = '<div class="plan-bonus-title">🎁 Bônus do ' + NOMES_PLANO[plano] + '</div>' +
+            per.map(o => '<div class="plan-bonus-row"><span>' + o.nome + '</span><b' + (bonusTexto(plano, o.meses) ? '' : ' class="none"') + '>' +
+              (bonusTexto(plano, o.meses, true) || 'Sem bônus') + '</b></div>').join('') +
+            excl.map(b => '<div class="plan-excl">★ Exclusivo do ' + NOMES_PLANO[plano] + ': ' + BONUS_TIPOS[b.tipo].varios + '</div>').join('') +
+            ((BONUS[plano] || []).some(b => b.tipo === 'call') ? '<div class="plan-bonus-note">1 call por mês de plano para revisar o treino e tirar dúvidas.</div>' : '');
+          bonus.hidden = false;
+        }
       });
       if (menor) {
         document.getElementById('price-from').innerHTML =
