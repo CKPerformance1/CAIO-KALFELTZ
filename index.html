@@ -494,7 +494,7 @@
         <details><summary>A consultoria inclui dieta?</summary><div class="ans">Não. A consultoria é focada em treino. Não inclui prescrição de dieta.</div></details>
         <details><summary>Tem garantia?</summary><div class="ans">Sim, garantia de 7 dias. A consultoria não inclui garantia de resultado físico, porque ele depende também da sua execução e rotina.</div></details>
         <details><summary>Qual a diferença para a planilha gratuita?</summary><div class="ans">A planilha é um modelo pronto que você segue sozinho. Na consultoria eu monto o treino para você, acompanho e ajusto conforme a sua evolução.</div></details>
-        <details><summary>Quais são os bônus de cada plano?</summary><div class="ans"><b>Essencial:</b> 3 calls de acompanhamento no trimestral e 6 no semestral (1 por mês). O mensal não tem bônus.<br><br><b>Premium:</b> as mesmas calls (3 no trimestral, 6 no semestral) e, com exclusividade, aulas presenciais comigo em Balneário Camboriú: 1 no mensal, 3 no trimestral e 6 no semestral.<br><br>As calls são pelo WhatsApp, e calls e aulas são agendadas direto comigo por lá.</div></details>
+        <details><summary>Quais são os bônus de cada plano?</summary><div class="ans"><b>Essencial:</b> 3 calls de acompanhamento no trimestral e 6 no semestral (1 por mês). O mensal não tem bônus.<br><br><b>Premium:</b> as mesmas calls (3 no trimestral, 6 no semestral) e, com exclusividade, aulas presenciais comigo em Balneário Camboriú: 1 no mensal, 3 no trimestral e 6 no semestral.<br><br>As calls são online, e calls e aulas são agendadas direto comigo pelo WhatsApp.</div></details>
         <details><summary>Atende presencialmente?</summary><div class="ans">Sim, em Balneário Camboriú: R. 1301, 471, Centro. Agende pelo WhatsApp.</div></details>
       </div>
     </section>
@@ -952,7 +952,7 @@ ${motivo}`;
             per.map(o => '<div class="plan-bonus-row"><span>' + o.nome + '</span><b' + (bonusTexto(plano, o.meses) ? '' : ' class="none"') + '>' +
               (bonusTexto(plano, o.meses, true) || 'Sem bônus') + '</b></div>').join('') +
             excl.map(b => '<div class="plan-excl">★ Exclusivo do ' + NOMES_PLANO[plano] + ': ' + BONUS_TIPOS[b.tipo].varios + '</div>').join('') +
-            ((BONUS[plano] || []).some(b => b.tipo === 'call') ? '<div class="plan-bonus-note">1 call por mês de plano, pelo WhatsApp, para revisar o treino e tirar dúvidas.' + (excl.length ? ' Calls e aulas são agendadas direto comigo no WhatsApp.' : ' Agendamento direto comigo no WhatsApp.') + '</div>' : '');
+            ((BONUS[plano] || []).some(b => b.tipo === 'call') ? '<div class="plan-bonus-note">1 call online por mês de plano para revisar o treino e tirar dúvidas.' + (excl.length ? ' Calls e aulas são agendadas direto comigo no WhatsApp.' : ' Agendamento direto comigo no WhatsApp.') + '</div>' : '');
           bonus.hidden = false;
         }
       });
