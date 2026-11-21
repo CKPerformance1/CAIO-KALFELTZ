@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Planilha de treino">
+  <style>
+    .sheet{transform-origin:100px 100px;transform:rotate(-6deg)}
+    .row{fill:#d9d2cc}
+    .box{fill:none;stroke:#bdb4ad;stroke-width:2.5}
+    .ck{fill:none;stroke:#B22020;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24;stroke-dashoffset:24;animation:tick 4.8s infinite}
+    .c2{animation-delay:.5s}.c3{animation-delay:1s}.c4{animation-delay:1.5s}
+    @keyframes tick{0%{stroke-dashoffset:24}12%{stroke-dashoffset:0}80%{stroke-dashoffset:0;opacity:1}92%{opacity:0;stroke-dashoffset:0}100%{opacity:0;stroke-dashoffset:24}}
+    @media (prefers-reduced-motion: reduce){.ck{animation:none;stroke-dashoffset:0}}
+  </style>
+  <g class="sheet">
+    <rect x="38" y="22" width="124" height="158" rx="10" fill="#faf7f4"/>
+    <rect x="38" y="22" width="124" height="34" rx="10" fill="#B22020"/>
+    <rect x="38" y="44" width="124" height="12" fill="#B22020"/>
+    <rect x="52" y="34" width="54" height="7" rx="3.5" fill="#ffffff" opacity=".9"/>
+    <rect x="52" y="45" width="34" height="5" rx="2.5" fill="#ffffff" opacity=".55"/>
+    <g>
+      <rect class="box" x="52" y="72" width="16" height="16" rx="4"/><rect class="row" x="78" y="76" width="68" height="8" rx="4"/>
+      <rect class="box" x="52" y="98" width="16" height="16" rx="4"/><rect class="row" x="78" y="102" width="56" height="8" rx="4"/>
+      <rect class="box" x="52" y="124" width="16" height="16" rx="4"/><rect class="row" x="78" y="128" width="64" height="8" rx="4"/>
+      <rect class="box" x="52" y="150" width="16" height="16" rx="4"/><rect class="row" x="78" y="154" width="48" height="8" rx="4"/>
+    </g>
+    <path class="ck c1" d="M55 80 l4 4 l8 -9"/>
+    <path class="ck c2" d="M55 106 l4 4 l8 -9"/>
+    <path class="ck c3" d="M55 132 l4 4 l8 -9"/>
+    <path class="ck c4" d="M55 158 l4 4 l8 -9"/>
+  </g>
+</svg>
