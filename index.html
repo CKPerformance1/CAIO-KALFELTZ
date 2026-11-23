@@ -651,46 +651,6 @@
     </div>
   </div>
 
-  <!-- ══ MODAL PRÉ-SELEÇÃO (consultoria) ══ -->
-  <div class="overlay" id="consult-overlay" onclick="if(event.target===this)closeConsultoria()">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="ps-label">
-      <div class="modal-head">
-        <button class="ps-back" id="ps-back" type="button" onclick="psVoltar()" hidden>← Voltar</button>
-        <div class="modal-title" id="ps-label">Pré-seleção</div>
-        <button class="modal-close" type="button" onclick="closeConsultoria()" aria-label="Fechar">×</button>
-      </div>
-      <div class="progress-bar"><div class="progress-fill" id="ps-progress" style="width:0%"></div></div>
-      <p class="plan-intro" id="ps-intro">8 perguntas rápidas. Assim eu já chego na conversa sabendo o melhor caminho para você.</p>
-      <div id="ps-steps"></div>
-      <form id="frm" class="quiz-step" onsubmit="enviarWA(event)">
-        <div class="step-question">Último passo: seus dados</div>
-        <div class="frow">
-          <div class="fg"><label for="f-nome">Nome *</label><input id="f-nome" type="text" required placeholder="Seu nome"></div>
-          <div class="fg"><label for="f-idade">Idade *</label><input id="f-idade" type="number" required placeholder="28" min="14" max="90"></div>
-        </div>
-        <div class="fg"><label for="f-whats">WhatsApp *</label><input id="f-whats" type="tel" required placeholder="(47) 99999-9999"></div>
-        <div class="fg"><label for="f-ig">Instagram</label><input id="f-ig" type="text" placeholder="@seuarroba"></div>
-        <div class="fg">
-          <label>Dias disponíveis para treinar</label>
-          <div class="dias-grid">
-            <div class="dia-btn" onclick="toggleDia(this)">Seg</div>
-            <div class="dia-btn" onclick="toggleDia(this)">Ter</div>
-            <div class="dia-btn" onclick="toggleDia(this)">Qua</div>
-            <div class="dia-btn" onclick="toggleDia(this)">Qui</div>
-            <div class="dia-btn" onclick="toggleDia(this)">Sex</div>
-            <div class="dia-btn" onclick="toggleDia(this)">Sáb</div>
-            <div class="dia-btn" onclick="toggleDia(this)">Dom</div>
-          </div>
-        </div>
-        <div class="fg"><label for="f-lesoes">Lesões, condições de saúde ou observações</label><textarea id="f-lesoes" placeholder="Conte o que eu preciso saber..."></textarea></div>
-        <button class="btn btn-primary btn-block" type="submit">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          Enviar para o Caio
-        </button>
-        <p class="wa-note">Suas respostas chegam prontas no meu WhatsApp. Eu te respondo com o plano ideal para o seu perfil.</p>
-      </form>
-    </div>
-  </div>
   <script>
     // ═══════════════════════════════════════════════════════════
     //  CONFIGURAÇÕES (edite aqui)
@@ -786,127 +746,10 @@
     }
     function closeQuiz() { fechar('quiz-overlay'); }
 
-    // ── PRÉ-SELEÇÃO (formulário → WhatsApp) ───────────────────
-    // Cada resposta soma "necessidade de acompanhamento" (pts) e pode marcar
-    // orçamento (cap), região (bc), proximidade (perto) e temperatura (temp).
-    // O plano indicado vai só para o Caio, como código na mensagem:
-    //   CK1 = Essencial · CK2 = Premium · CK3 = Performance
-    //   Q = quente (quer começar agora) · M = morno · F = frio (pesquisando)
-    //   + = orçamento permite subir de plano · ! = precisa de mais do que o orçamento indica
-    const PS = [
-      { k: 'objetivo', q: 'Qual é o seu principal objetivo?', o: [
-        { t: 'Ganhar massa muscular', i: '🏋️' },
-        { t: 'Emagrecer', i: '⚡' },
-        { t: 'Melhorar saúde e disposição', i: '🫀' },
-        { t: 'Treinar com dor ou limitação física', i: '🩹', pts: 1 },
-        { t: 'Performance em um esporte', i: '🏆', pts: 1 } ] },
-      { k: 'dificuldade', q: 'O que mais te atrapalha hoje?', o: [
-        { t: 'Não sei montar meu treino', i: '❓' },
-        { t: 'Falta de constância e motivação', i: '📉', pts: 1 },
-        { t: 'Treino mas não vejo resultado', i: '🔁', pts: 1 },
-        { t: 'Rotina corrida, pouco tempo', i: '⏱️', pts: 1 } ] },
-      { k: 'experiencia', q: 'Há quanto tempo você treina?', o: [
-        { t: 'Não treino ou menos de 6 meses', i: '🌱' },
-        { t: 'De 6 meses a 2 anos', i: '💪' },
-        { t: 'Mais de 2 anos', i: '🔥' } ] },
-      { k: 'acompanhamento', q: 'Que tipo de acompanhamento você quer?', o: [
-        { t: 'Um treino bem feito, e eu sigo sozinho', i: '📋', pts: 0 },
-        { t: 'Acompanhamento com ajustes frequentes', i: '🔄', pts: 2 },
-        { t: 'Contato direto, correção constante e encontros presenciais', i: '🤝', pts: 4, perto: true } ] },
-      { k: 'saude', q: 'Tem alguma lesão ou condição de saúde?', o: [
-        { t: 'Não', i: '✅' },
-        { t: 'Sim, algo leve', i: '🩹', pts: 1 },
-        { t: 'Sim, e preciso de acompanhamento de perto', i: '🩺', pts: 2, perto: true } ] },
-      { k: 'local', q: 'Onde você mora?', o: [
-        { t: 'Balneário Camboriú ou região', i: '📍', bc: true },
-        { t: 'Outra cidade', i: '🌎', bc: false } ] },
-      { k: 'inicio', q: 'Quando você quer começar?', o: [
-        { t: 'O quanto antes', i: '🚀', temp: 'Q' },
-        { t: 'Nas próximas semanas', i: '📅', temp: 'M' },
-        { t: 'Só estou pesquisando', i: '👀', temp: 'F' } ] },
-      { k: 'investimento', q: 'Quanto você pode investir por mês no seu treino?', o: [
-        { t: 'Até R$ 150', i: '💵', cap: 1 },
-        { t: 'Entre R$ 150 e R$ 300', i: '💳', cap: 2 },
-        { t: 'Acima de R$ 300', i: '💎', cap: 3 } ] }
-    ];
-    let psStep = 0, psResp = {};
-
-    function psRender() {
-      const wrap = document.getElementById('ps-steps');
-      wrap.innerHTML = PS.map((st, n) =>
-        '<div class="quiz-step" id="ps-' + n + '"><div class="step-question">' + st.q + '</div><div class="quiz-options">' +
-        st.o.map((o, m) => '<button type="button" class="quiz-opt" onclick="psResponder(' + n + ',' + m + ')"><span class="opt-icon">' + o.i + '</span>' + o.t + '</button>').join('') +
-        '</div></div>').join('');
-    }
-    function psMostrar(n) {
-      psStep = n;
-      document.querySelectorAll('#ps-steps .quiz-step, #frm').forEach(el => el.classList.remove('active'));
-      const alvo = n < PS.length ? document.getElementById('ps-' + n) : document.getElementById('frm');
-      alvo.classList.add('active');
-      document.getElementById('ps-progress').style.width = (n / (PS.length + 1) * 100) + '%';
-      document.getElementById('ps-label').textContent = n < PS.length ? 'Pergunta ' + (n + 1) + ' de ' + PS.length : 'Quase lá';
-      document.getElementById('ps-back').hidden = n === 0;
-      document.getElementById('ps-intro').hidden = n !== 0;
-    }
-    function psResponder(n, m) { psResp[PS[n].k] = PS[n].o[m]; psMostrar(n + 1); }
-    function psVoltar() { if (psStep > 0) psMostrar(psStep - 1); }
-
-    function psIndicacao() {
-      const r = Object.values(psResp);
-      const pts = r.reduce((a, o) => a + (o.pts || 0), 0);
-      const perto = r.some(o => o.perto);
-      const bc = psResp.local ? psResp.local.bc : false;
-      const cap = psResp.investimento ? psResp.investimento.cap : 2;
-      let need = pts <= 1 ? 1 : 2;
-      if (perto && bc) need = 3;
-      let plano = Math.min(need, cap);
-      if (plano === 3 && !bc) plano = 2;
-      const nomes = { 1: 'Essencial', 2: 'Premium', 3: 'Performance' };
-      const sinal = cap > plano && !(plano === 2 && !bc) ? '+' : (need > cap ? '!' : '');
-      const temp = psResp.inicio ? psResp.inicio.temp : 'M';
-      return { codigo: 'CK' + plano + '-' + temp + sinal, plano: nomes[plano], pts };
-    }
-
-    function openConsultoria() {
-      psResp = {};
-      psRender();
-      document.querySelectorAll('.dia-btn').forEach(b => b.classList.remove('selected'));
-      document.getElementById('frm').reset();
-      psMostrar(0);
-      abrir('consult-overlay');
-    }
-    function closeConsultoria() { fechar('consult-overlay'); }
-    function toggleDia(el) { el.classList.toggle('selected'); }
-    function enviarWA(e) {
-      e.preventDefault();
-      const v = id => document.getElementById(id).value.trim();
-      const resp = k => psResp[k] ? psResp[k].t : 'Não respondeu';
-      const dias = [...document.querySelectorAll('.dia-btn.selected')].map(b => b.textContent).join(', ') || 'Não informado';
-      const ind = psIndicacao();
-      const msg =
-`Olá Caio! Vim pelo seu site e quero uma vaga na consultoria. Minhas respostas:
-
-👤 *Nome:* ${v('f-nome')}
-🎂 *Idade:* ${v('f-idade')} anos
-📱 *WhatsApp:* ${v('f-whats')}
-📸 *Instagram:* ${v('f-ig') || 'Não informado'}
-
-🎯 *Objetivo:* ${resp('objetivo')}
-🧩 *O que mais atrapalha:* ${resp('dificuldade')}
-💪 *Tempo de treino:* ${resp('experiencia')}
-🤝 *Acompanhamento que quero:* ${resp('acompanhamento')}
-🩹 *Lesão ou condição de saúde:* ${resp('saude')}
-📍 *Onde moro:* ${resp('local')}
-🚀 *Quando quero começar:* ${resp('inicio')}
-💳 *Investimento mensal:* ${resp('investimento')}
-📅 *Dias disponíveis:* ${dias}
-
-📝 *Observações:* ${v('f-lesoes') || 'Nenhuma'}
-
-Ref: ${ind.codigo}`;
-      window.open('https://wa.me/' + WHATS + '?text=' + encodeURIComponent(msg), '_blank');
-      closeConsultoria();
-    }
+    // ── APLICAÇÃO (página /aplicar) ─────────────────────────────
+    // Leva junto os parâmetros de origem (utm) do link, se houver.
+    function openConsultoria() { location.href = 'aplicar/' + location.search; }
+    function closeConsultoria() {}
 
     // ── PRAZO E DEPOIMENTOS ───────────────────────────────────
     (function preencher() {
@@ -971,7 +814,6 @@ Ref: ${ind.codigo}`;
     document.addEventListener('keydown', e => {
       if (e.key !== 'Escape') return;
       if (document.getElementById('quiz-overlay').classList.contains('open')) closeQuiz();
-      if (document.getElementById('consult-overlay').classList.contains('open')) closeConsultoria();
     });
   </script>
 

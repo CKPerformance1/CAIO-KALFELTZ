@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+  <title>Aplicação · CK Performance</title>
+  <meta name="description" content="Aplicação para a consultoria CK Performance. Antes de montar qualquer treino, quero te conhecer."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:locale" content="pt_BR"/>
+  <meta property="og:title" content="Aplicação · CK Performance"/>
+  <meta property="og:description" content="Antes de montar qualquer treino, quero te conhecer. 10 perguntas, uns 2 minutos."/>
+  <meta property="og:image" content="https://ckperformance1.github.io/CAIO-KALFELTZ/og-ck-performance.jpg"/>
+  <meta name="theme-color" content="#0A0A0A"/>
+  <link rel="icon" href="../assets/ck-logo.jpg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Saira+Condensed:wght@600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --bg:#0b0b0b; --card:#151212; --line:#2a2424; --fg:#fff; --muted:#a39a9a; --dim:#6c6464;
+      --red:#B22020; --red-hi:#e23a3a;
+      --display:'Saira Condensed','Arial Narrow',Impact,sans-serif;
+      --body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html,body{height:100%}
+    body{font-family:var(--body);background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    button,input,select,textarea{font-family:inherit}
+    :focus-visible{outline:2px solid var(--red-hi);outline-offset:3px}
+
+    /* palco: foto da academia com um "foco de luz" vermelho */
+    .stage{position:fixed;inset:0;z-index:-1;background:#0b0b0b url('../assets/academia.jpg') center 70%/cover}
+    .stage::before{content:"";position:absolute;inset:0;background:
+      radial-gradient(60% 45% at 50% 0%,rgba(178,32,32,.45),transparent 70%),
+      linear-gradient(180deg,rgba(11,11,11,.72) 0%,rgba(11,11,11,.9) 40%,#0b0b0b 75%)}
+    .stage::after{content:"";position:absolute;left:50%;top:-10%;width:520px;height:520px;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(226,58,58,.25),transparent);filter:blur(30px);animation:breathe 6s ease-in-out infinite}
+    @keyframes breathe{50%{opacity:.55;transform:translateX(-50%) scale(1.08)}}
+
+    .wrap{max-width:520px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;
+      padding:max(18px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(28px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left))}
+    .bar{display:flex;align-items:center;gap:14px}
+    .bar a.logo img{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid var(--red)}
+    .ticks{flex:1;display:flex;gap:4px}
+    .ticks i{flex:1;height:3px;border-radius:2px;background:#2d2727;transition:background .3s}
+    .ticks i.on{background:var(--red-hi)}
+    .count{font-family:var(--display);font-weight:700;font-size:.95rem;letter-spacing:.12em;color:var(--muted);min-width:52px;text-align:right}
+    .close{color:var(--muted);text-decoration:none;font-size:1.5rem;line-height:1;padding:0 2px}
+
+    .screen{flex:1;display:none;flex-direction:column;justify-content:flex-end;gap:18px;padding-top:28px;animation:in .45s cubic-bezier(.2,.8,.2,1)}
+    .screen.active{display:flex}
+    @keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+    .kicker{font-family:var(--display);font-weight:700;font-size:.9rem;letter-spacing:.28em;text-transform:uppercase;color:var(--red-hi)}
+    h1,h2{font-family:var(--display);font-weight:800;text-transform:uppercase;line-height:.98;letter-spacing:.01em;text-wrap:balance}
+    h1{font-size:clamp(2.6rem,12vw,3.6rem)}
+    h2{font-size:clamp(2rem,9vw,2.7rem)}
+    .lead{font-size:1rem;color:#d6cdcd;line-height:1.6}
+    .meta{font-family:var(--display);font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);font-size:.85rem}
+
+    /* fala do Caio entre as perguntas */
+    .say{display:flex;gap:10px;align-items:flex-start;font-size:.88rem;color:#e9e1e1;line-height:1.5}
+    .say img{width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1.5px solid var(--red)}
+    .say span{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:4px 14px 14px 14px;padding:8px 12px}
+    .say:empty{display:none}
+
+    .opts{list-style:none;display:flex;flex-direction:column;border-top:1px solid var(--line)}
+    .opt{width:100%;display:grid;grid-template-columns:34px minmax(0,1fr);align-items:baseline;gap:6px;text-align:left;background:none;border:none;border-bottom:1px solid var(--line);color:#efe9e9;font-size:1.02rem;padding:15px 4px;cursor:pointer;transition:background .2s,padding .2s,color .2s}
+    .opt b{font-family:var(--display);font-weight:700;font-size:.85rem;color:var(--dim);letter-spacing:.08em}
+    .opt:hover,.opt:focus-visible{background:linear-gradient(90deg,rgba(178,32,32,.18),transparent);padding-left:10px;color:#fff}
+    .opt.picked{background:linear-gradient(90deg,rgba(178,32,32,.35),transparent);color:#fff}
+    .opt.picked b{color:var(--red-hi)}
+    .back{align-self:flex-start;background:none;border:none;color:var(--muted);font-size:.85rem;cursor:pointer;padding:4px 0}
+    .back:hover{color:#fff}
+
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:none;border-radius:12px;background:var(--red);color:#fff;font-weight:700;font-size:1rem;padding:16px 22px;cursor:pointer;text-decoration:none;box-shadow:0 14px 34px -14px rgba(226,58,58,.9);transition:transform .15s,background .2s}
+    .btn:hover{background:#c62424}
+    .btn:active{transform:scale(.97)}
+    .btn.block{width:100%}
+
+    .field{display:flex;flex-direction:column;gap:6px;border-bottom:1px solid var(--line);padding:10px 0}
+    .field label{font-family:var(--display);font-weight:700;font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+    .field input,.field select,.field textarea{background:transparent;border:none;color:#fff;font-size:1.05rem;padding:4px 0;outline:none;-webkit-appearance:none;appearance:none}
+    .field select option{background:#151212}
+    .field textarea{resize:vertical;min-height:54px}
+    .field:focus-within{border-bottom-color:var(--red-hi)}
+    .field input::placeholder,.field textarea::placeholder{color:#5c5454}
+    .note{font-size:.78rem;color:var(--muted);line-height:1.5}
+    .err{font-size:.8rem;color:#ff8a8a}
+
+    .me{display:flex;align-items:center;gap:12px}
+    .me img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--red)}
+    .me div{font-size:.85rem;color:var(--muted);line-height:1.4}
+    .me b{display:block;color:#fff;font-size:.95rem}
+
+    @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <div class="stage" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="bar">
+      <a class="logo" href="../" aria-label="Voltar ao site"><img src="../assets/ck-logo.jpg" alt=""/></a>
+      <div class="ticks" id="ticks" aria-hidden="true"></div>
+      <div class="count" id="count"></div>
+      <a class="close" href="../" aria-label="Fechar e voltar ao site">×</a>
+    </div>
+
+    <main id="screens">
+      <!-- boas-vindas -->
+      <section class="screen active" id="welcome">
+        <div class="kicker">Aplicação · CK Performance</div>
+        <h1>Antes de montar qualquer treino, quero te conhecer.</h1>
+        <p class="lead">Não tem resposta certa. Responde com sinceridade, porque é com isso que eu chego na nossa conversa sabendo de onde você parte e onde quer chegar.</p>
+        <div class="me"><img src="../assets/ck-logo.jpg" alt=""/><div><b>Caio Kalfeltz</b>Personal trainer. Eu mesmo leio cada aplicação.</div></div>
+        <button class="btn block" type="button" onclick="start()">Bora começar →</button>
+        <div class="meta">10 perguntas · uns 2 minutos</div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // ═════════════════════════════════════════════════════════════
+    //  Perguntas. "say" é a reação do Caio que aparece na tela seguinte.
+    //  pts = necessidade de acompanhamento · perto = quer/precisa de contato próximo
+    //  bc = mora em Balneário Camboriú ou região · temp = Q quente, M morno, F frio
+    // ═════════════════════════════════════════════════════════════
+    const QS = [
+      { k:'idade', q:'Primeiro: quantos anos você tem?', o:[
+        { t:'Menos de 18' }, { t:'18 a 25' }, { t:'26 a 35' }, { t:'36 a 45' },
+        { t:'Mais de 45', say:'Tenho aluna avó treinando comigo. Idade não é desculpa.' } ] },
+      { k:'tempo', q:'Há quanto tempo você treina?', o:[
+        { t:'Ainda não treino', say:'Ótimo momento pra começar do jeito certo.' },
+        { t:'Menos de 6 meses' }, { t:'De 6 meses a 2 anos' },
+        { t:'Mais de 2 anos', say:'Então você já sabe que só treinar não basta. Precisa de estratégia.' } ] },
+      { k:'sente', q:'E como você se sente com o seu corpo hoje?', o:[
+        { t:'Satisfeito, quero manter e evoluir' },
+        { t:'Tá ok, mas sei que dá pra melhorar', pts:1 },
+        { t:'Frustrado. Sinto que tô travado', pts:1, quente:true, say:'Entendo. Muita gente chega assim, e dá pra virar esse jogo.' } ] },
+      { k:'atrapalha', q:'O que mais te atrapalha hoje?', o:[
+        { t:'Não sei montar meu treino' },
+        { t:'Falta de constância', pts:1, say:'Constância a gente constrói junto. Você não vai treinar sozinho.' },
+        { t:'Treino, mas não vejo resultado', pts:1 },
+        { t:'Rotina corrida, pouco tempo', pts:1, say:'Tenho aluno que trabalha das 15h às 23h e evoluiu. O treino se adapta a você.' },
+        { t:'Dor ou limitação física', pts:1 } ] },
+      { k:'meta', q:'O que você quer conquistar nos próximos 3 meses?', o:[
+        { t:'Emagrecer' }, { t:'Ganhar massa muscular' }, { t:'Mais saúde e disposição' },
+        { t:'Treinar sem dor', pts:1 }, { t:'Render mais no meu esporte', pts:1 } ] },
+      { k:'saude', q:'Tem alguma lesão ou condição de saúde que eu precise saber?', o:[
+        { t:'Não' },
+        { t:'Sim, algo leve', pts:1, say:'Anotado. Vou te perguntar os detalhes na conversa.' },
+        { t:'Sim, e preciso de atenção de perto', pts:2, perto:true, say:'Fica tranquilo. Já acompanhei aluno com dor na coluna e com anemia falciforme. O treino respeita a sua condição.' } ] },
+      { k:'antes', q:'Já teve acompanhamento de um profissional antes?', o:[
+        { t:'Nunca, vai ser a primeira vez' },
+        { t:'Já tentei sozinho, com planilha ou vídeo', pts:1 },
+        { t:'Já tive personal ou consultoria', say:'Então você vai sentir a diferença de um acompanhamento de verdade.' } ] },
+      { k:'como', q:'Como você imagina esse acompanhamento?', o:[
+        { t:'Um treino bem feito, e eu sigo sozinho', pts:0, sozinho:true },
+        { t:'Alguém acompanhando e ajustando de perto', pts:2 },
+        { t:'Contato direto, correção constante e encontros presenciais', pts:4, perto:true } ] },
+      { k:'local', q:'Onde você mora?', o:[
+        { t:'Balneário Camboriú ou região', bc:true, say:'Que bom, então dá até pra gente treinar junto.' },
+        { t:'Outra cidade', bc:false, say:'Sem problema. A consultoria é online, de qualquer lugar.' } ] },
+      { k:'momento', q:'Em que momento você está?', o:[
+        { t:'Quero começar o quanto antes', temp:'Q' },
+        { t:'Quero começar, mas ainda tô avaliando', temp:'M' },
+        { t:'Só pesquisando por enquanto', temp:'F' } ] }
+    ];
+    const ORIGENS = ['Post ou reels no Instagram','Stories','Indicação de amigo ou aluno','Influenciador(a)','Google','Outro'];
+    const WHATS = '5547999286679';
+
+    let step = -1; const resp = {};
+    const $ = id => document.getElementById(id);
+    const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+    // monta as telas
+    (function build() {
+      const main = $('screens');
+      let h = '';
+      QS.forEach((s, n) => {
+        h += '<section class="screen" id="q' + n + '"><div class="say" id="say' + n + '"></div>' +
+             '<div class="kicker">Pergunta ' + String(n + 1).padStart(2, '0') + '</div><h2>' + esc(s.q) + '</h2><ul class="opts">' +
+             s.o.map((o, m) => '<li><button type="button" class="opt" onclick="pick(' + n + ',' + m + ',this)"><b>' + String(m + 1).padStart(2, '0') + '</b>' + esc(o.t) + '</button></li>').join('') +
+             '</ul><button class="back" type="button" onclick="go(' + (n - 1) + ')">← Voltar</button></section>';
+      });
+      h += '<section class="screen" id="final"><div class="say" id="sayF"></div><div class="kicker">Última etapa</div><h2>Pra onde eu te chamo?</h2>' +
+           '<p class="lead">Eu mesmo respondo no seu WhatsApp. Não é robô.</p>' +
+           '<form id="frm" novalidate>' +
+           '<div class="field"><label for="f-nome">Seu nome</label><input id="f-nome" autocomplete="name" placeholder="Nome e sobrenome" required></div>' +
+           '<div class="field"><label for="f-whats">WhatsApp</label><input id="f-whats" type="tel" autocomplete="tel" inputmode="tel" placeholder="(47) 99999-9999" required></div>' +
+           '<div class="field"><label for="f-ig">Instagram</label><input id="f-ig" placeholder="@seuperfil"></div>' +
+           '<div class="field"><label for="f-origem">Como você chegou até mim?</label><select id="f-origem"><option value="">Escolha uma opção</option>' + ORIGENS.map(o => '<option>' + o + '</option>').join('') + '</select></div>' +
+           '<div class="field"><label for="f-obs">Quer me contar mais alguma coisa? (opcional)</label><textarea id="f-obs" placeholder="Lesão, rotina, objetivo..."></textarea></div>' +
+           '<p class="err" id="err" hidden>Preencha seu nome e WhatsApp pra eu conseguir te chamar.</p>' +
+           '<button class="btn block" type="submit" style="margin-top:14px">Enviar aplicação →</button>' +
+           '<p class="note" style="margin-top:10px">Vai abrir o seu WhatsApp com as respostas prontas. É só tocar em enviar.</p></form>' +
+           '<button class="back" type="button" onclick="go(' + (QS.length - 1) + ')">← Voltar</button></section>';
+      h += '<section class="screen" id="done"><div class="kicker">Aplicação recebida</div><h2>Agora é só tocar em enviar no WhatsApp.</h2>' +
+           '<p class="lead">Se o WhatsApp não abriu, toque no botão abaixo. Assim que a mensagem chegar, eu leio suas respostas e te chamo pra conversar.</p>' +
+           '<a class="btn block" id="wa-again" href="#" target="_blank" rel="noopener">Abrir WhatsApp</a>' +
+           '<a class="back" href="../">← Voltar ao site</a></section>';
+      main.insertAdjacentHTML('beforeend', h);
+      $('ticks').innerHTML = QS.map(() => '<i></i>').join('') + '<i></i>';
+      $('frm').addEventListener('submit', send);
+    })();
+
+    function show(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      $(id).classList.add('active');
+      window.scrollTo(0, 0);
+    }
+    function paint() {
+      const total = QS.length + 1;
+      [...$('ticks').children].forEach((t, i) => t.classList.toggle('on', i <= step));
+      $('count').textContent = step < 0 ? '' : String(Math.min(step + 1, total)).padStart(2, '0') + ' / ' + total;
+    }
+    function start() { go(0); }
+    function go(n) {
+      if (n < 0) { step = -1; show('welcome'); paint(); return; }
+      step = n;
+      show(n < QS.length ? 'q' + n : 'final');
+      paint();
+    }
+    function pick(n, m, el) {
+      resp[QS[n].k] = QS[n].o[m];
+      el.closest('.opts').querySelectorAll('.opt').forEach(b => b.classList.remove('picked'));
+      el.classList.add('picked');
+      const fala = QS[n].o[m].say || '';
+      const alvo = n + 1 < QS.length ? $('say' + (n + 1)) : $('sayF');
+      alvo.innerHTML = fala ? '<img src="../assets/ck-logo.jpg" alt=""><span>' + esc(fala) + '</span>' : '';
+      setTimeout(() => go(n + 1), 260);
+    }
+
+    function indicacao() {
+      const r = Object.values(resp);
+      const pts = r.reduce((a, o) => a + (o.pts || 0), 0);
+      const perto = r.some(o => o.perto);
+      const bc = resp.local ? resp.local.bc : false;
+      let plano = 2;
+      if (resp.como && resp.como.sozinho && pts <= 2 && !perto) plano = 1;
+      if (perto && bc) plano = 3;
+      let temp = resp.momento ? resp.momento.temp : 'M';
+      if (temp === 'M' && resp.sente && resp.sente.quente) temp = 'Q';
+      return 'CK' + plano + '-' + temp;
+    }
+    function origemLink() {
+      const u = new URLSearchParams(location.search);
+      const parts = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content'].map(k => u.get(k)).filter(Boolean);
+      return parts.length ? parts.join(' / ') : 'direto';
+    }
+
+    function send(e) {
+      e.preventDefault();
+      const v = id => $(id).value.trim();
+      if (!v('f-nome') || v('f-whats').replace(/\D/g, '').length < 10) { $('err').hidden = false; return; }
+      $('err').hidden = true;
+      const a = k => resp[k] ? resp[k].t : 'Não respondeu';
+      const msg =
+`Olá Caio! Fiz a aplicação no seu site. Minhas respostas:
+
+👤 *Nome:* ${v('f-nome')}
+📱 *WhatsApp:* ${v('f-whats')}
+📸 *Instagram:* ${v('f-ig') || 'Não informado'}
+
+🎂 *Idade:* ${a('idade')}
+💪 *Tempo de treino:* ${a('tempo')}
+🪞 *Como me sinto com meu corpo:* ${a('sente')}
+🧩 *O que mais me atrapalha:* ${a('atrapalha')}
+🎯 *Meta para 3 meses:* ${a('meta')}
+🩹 *Lesão ou condição de saúde:* ${a('saude')}
+📋 *Acompanhamento antes:* ${a('antes')}
+🤝 *Como imagino o acompanhamento:* ${a('como')}
+📍 *Onde moro:* ${a('local')}
+🚀 *Momento:* ${a('momento')}
+👀 *Como cheguei até você:* ${v('f-origem') || 'Não informado'}
+
+📝 *Observações:* ${v('f-obs') || 'Nenhuma'}
+
+Ref: ${indicacao()} · ${origemLink()}`;
+      const url = 'https://wa.me/' + WHATS + '?text=' + encodeURIComponent(msg);
+      $('wa-again').href = url;
+      step = QS.length + 1; paint(); show('done');
+      window.open(url, '_blank');
+    }
+  </script>
+</body>
+</html>
