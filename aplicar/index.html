@@ -8,7 +8,7 @@
   <meta property="og:type" content="website"/>
   <meta property="og:locale" content="pt_BR"/>
   <meta property="og:title" content="Aplicação · CK Performance"/>
-  <meta property="og:description" content="Antes de montar qualquer treino, quero te conhecer. 10 perguntas, uns 2 minutos."/>
+  <meta property="og:description" content="Antes de montar qualquer treino, quero te conhecer. Uns 3 minutos, só tocando nas respostas."/>
   <meta property="og:image" content="https://ckperformance1.github.io/CAIO-KALFELTZ/og-ck-performance.jpg"/>
   <meta name="theme-color" content="#0A0A0A"/>
   <link rel="icon" href="../assets/ck-logo.jpg"/>
@@ -112,7 +112,7 @@
         <p class="lead">Não tem resposta certa. Responde com sinceridade, porque é com isso que eu chego na nossa conversa sabendo de onde você parte e onde quer chegar.</p>
         <div class="me"><img src="../assets/ck-logo.jpg" alt=""/><div><b>Caio Kalfeltz</b>Personal trainer. Eu mesmo leio cada aplicação.</div></div>
         <button class="btn block" type="button" onclick="start()">Bora começar →</button>
-        <div class="meta">10 perguntas · uns 2 minutos</div>
+        <div class="meta">Só toques nas respostas · uns 3 minutos</div>
       </section>
     </main>
   </div>
@@ -127,33 +127,45 @@
       { k:'idade', q:'Primeiro: quantos anos você tem?', o:[
         { t:'Menos de 18' }, { t:'18 a 25' }, { t:'26 a 35' }, { t:'36 a 45' },
         { t:'Mais de 45', say:'Tenho aluna avó treinando comigo. Idade não é desculpa.' } ] },
-      { k:'tempo', q:'Há quanto tempo você treina?', o:[
+      { k:'tempo', q:'Há quanto tempo você treina musculação?', o:[
         { t:'Ainda não treino', say:'Ótimo momento pra começar do jeito certo.' },
         { t:'Menos de 6 meses' }, { t:'De 6 meses a 2 anos' },
         { t:'Mais de 2 anos', say:'Então você já sabe que só treinar não basta. Precisa de estratégia.' } ] },
-      { k:'sente', q:'E como você se sente com o seu corpo hoje?', o:[
+      { k:'sente', q:'Como você se sente com o seu corpo hoje?', o:[
         { t:'Satisfeito, quero manter e evoluir' },
         { t:'Tá ok, mas sei que dá pra melhorar', pts:1 },
         { t:'Frustrado. Sinto que tô travado', pts:1, quente:true, say:'Entendo. Muita gente chega assim, e dá pra virar esse jogo.' } ] },
+      { k:'motivo', q:'O que te fez buscar ajuda agora?', o:[
+        { t:'Quero melhorar aos poucos' },
+        { t:'Quero entender e aprender a treinar direito' },
+        { t:'Quero acelerar meus resultados', pts:1 },
+        { t:'Cansei de tentar sozinho, quero resolver de vez', pts:1, quente:true, say:'Então chegou no lugar certo. Aqui você não treina sozinho.' },
+        { t:'Recomendação médica', pts:1, reab:true, say:'Faz sentido. O treino vai respeitar as orientações que você recebeu.' } ] },
+      { k:'meta', q:'O que você quer conquistar nos próximos 3 meses?', o:[
+        { t:'Ganhar massa muscular' },
+        { t:'Emagrecer', emag:true },
+        { t:'Melhorar meu condicionamento físico' },
+        { t:'Voltar a treinar bem depois de uma lesão', pts:1, reab:true } ] },
+      { k:'caneta', se:() => resp.meta && resp.meta.emag, q:'Você usa ou já usou canetas emagrecedoras? (Mounjaro, Ozempic…)', o:[
+        { t:'Uso agora', pts:1, say:'Importante saber. Com caneta, o treino de força é o que protege a sua massa muscular.' },
+        { t:'Já usei' }, { t:'Nunca usei' } ] },
       { k:'atrapalha', q:'O que mais te atrapalha hoje?', o:[
         { t:'Não sei montar meu treino' },
-        { t:'Falta de constância', pts:1, say:'Constância a gente constrói junto. Você não vai treinar sozinho.' },
+        { t:'Falta de constância', pts:1, say:'Constância a gente constrói junto.' },
         { t:'Treino, mas não vejo resultado', pts:1 },
         { t:'Rotina corrida, pouco tempo', pts:1, say:'Tenho aluno que trabalha das 15h às 23h e evoluiu. O treino se adapta a você.' },
-        { t:'Dor ou limitação física', pts:1 } ] },
-      { k:'meta', q:'O que você quer conquistar nos próximos 3 meses?', o:[
-        { t:'Emagrecer' }, { t:'Ganhar massa muscular' }, { t:'Mais saúde e disposição' },
-        { t:'Treinar sem dor', pts:1 }, { t:'Render mais no meu esporte', pts:1 } ] },
-      { k:'saude', q:'Tem alguma lesão ou condição de saúde que eu precise saber?', o:[
+        { t:'Dor ou limitação física', pts:1, reab:true } ] },
+      { k:'saude', q:'Tem alguma lesão, dor ou condição de saúde?', o:[
         { t:'Não' },
         { t:'Sim, algo leve', pts:1, say:'Anotado. Vou te perguntar os detalhes na conversa.' },
-        { t:'Sim, e preciso de atenção de perto', pts:2, perto:true, say:'Fica tranquilo. Já acompanhei aluno com dor na coluna e com anemia falciforme. O treino respeita a sua condição.' } ] },
+        { t:'Sim, e preciso de atenção de perto', pts:2, perto:true, reab:true, say:'Fica tranquilo. Já acompanhei aluno com dor na coluna e com anemia falciforme. O treino respeita a sua condição.' },
+        { t:'Estou voltando de lesão ou cirurgia', pts:2, perto:true, reab:true, say:'A volta precisa ser bem feita. Vou te pedir a liberação do seu médico antes de começar.' } ] },
       { k:'antes', q:'Já teve acompanhamento de um profissional antes?', o:[
         { t:'Nunca, vai ser a primeira vez' },
         { t:'Já tentei sozinho, com planilha ou vídeo', pts:1 },
         { t:'Já tive personal ou consultoria', say:'Então você vai sentir a diferença de um acompanhamento de verdade.' } ] },
       { k:'como', q:'Como você imagina esse acompanhamento?', o:[
-        { t:'Um treino bem feito, e eu sigo sozinho', pts:0, sozinho:true },
+        { t:'Um treino bem feito, e eu sigo sozinho', sozinho:true },
         { t:'Alguém acompanhando e ajustando de perto', pts:2 },
         { t:'Contato direto, correção constante e encontros presenciais', pts:4, perto:true } ] },
       { k:'local', q:'Onde você mora?', o:[
@@ -179,7 +191,7 @@
         h += '<section class="screen" id="q' + n + '"><div class="say" id="say' + n + '"></div>' +
              '<div class="kicker">Pergunta ' + String(n + 1).padStart(2, '0') + '</div><h2>' + esc(s.q) + '</h2><ul class="opts">' +
              s.o.map((o, m) => '<li><button type="button" class="opt" onclick="pick(' + n + ',' + m + ',this)"><b>' + String(m + 1).padStart(2, '0') + '</b>' + esc(o.t) + '</button></li>').join('') +
-             '</ul><button class="back" type="button" onclick="go(' + (n - 1) + ')">← Voltar</button></section>';
+             '</ul><button class="back" type="button" onclick="back(' + n + ')">← Voltar</button></section>';
       });
       h += '<section class="screen" id="final"><div class="say" id="sayF"></div><div class="kicker">Última etapa</div><h2>Pra onde eu te chamo?</h2>' +
            '<p class="lead">Eu mesmo respondo no seu WhatsApp. Não é robô.</p>' +
@@ -192,13 +204,12 @@
            '<p class="err" id="err" hidden>Preencha seu nome e WhatsApp pra eu conseguir te chamar.</p>' +
            '<button class="btn block" type="submit" style="margin-top:14px">Enviar aplicação →</button>' +
            '<p class="note" style="margin-top:10px">Vai abrir o seu WhatsApp com as respostas prontas. É só tocar em enviar.</p></form>' +
-           '<button class="back" type="button" onclick="go(' + (QS.length - 1) + ')">← Voltar</button></section>';
+           '<button class="back" type="button" onclick="back(' + QS.length + ')">← Voltar</button></section>';
       h += '<section class="screen" id="done"><div class="kicker">Aplicação recebida</div><h2>Agora é só tocar em enviar no WhatsApp.</h2>' +
            '<p class="lead">Se o WhatsApp não abriu, toque no botão abaixo. Assim que a mensagem chegar, eu leio suas respostas e te chamo pra conversar.</p>' +
            '<a class="btn block" id="wa-again" href="#" target="_blank" rel="noopener">Abrir WhatsApp</a>' +
            '<a class="back" href="../">← Voltar ao site</a></section>';
       main.insertAdjacentHTML('beforeend', h);
-      $('ticks').innerHTML = QS.map(() => '<i></i>').join('') + '<i></i>';
       $('frm').addEventListener('submit', send);
     })();
 
@@ -207,30 +218,40 @@
       $(id).classList.add('active');
       window.scrollTo(0, 0);
     }
+    const vis = n => !QS[n].se || QS[n].se();
+    const visiveis = () => QS.map((_, n) => n).filter(vis);
+    function proxima(n) { let i = n + 1; while (i < QS.length && !vis(i)) i++; return i; }
+    function anterior(n) { let i = n - 1; while (i >= 0 && !vis(i)) i--; return i; }
     function paint() {
-      const total = QS.length + 1;
-      [...$('ticks').children].forEach((t, i) => t.classList.toggle('on', i <= step));
-      $('count').textContent = step < 0 ? '' : String(Math.min(step + 1, total)).padStart(2, '0') + ' / ' + total;
+      const lista = visiveis(), total = lista.length + 1;
+      let pos = step < 0 ? 0 : (step >= QS.length ? total : lista.indexOf(step) + 1);
+      if (step > QS.length) pos = total;
+      $('ticks').innerHTML = Array.from({length: total}, (_, i) => '<i' + (i < pos ? ' class="on"' : '') + '></i>').join('');
+      $('count').textContent = step < 0 ? '' : String(pos).padStart(2, '0') + ' / ' + total;
     }
-    function start() { go(0); }
+    function start() { go(proxima(-1)); }
     function go(n) {
       if (n < 0) { step = -1; show('welcome'); paint(); return; }
       step = n;
       show(n < QS.length ? 'q' + n : 'final');
       paint();
     }
+    function back(n) { go(anterior(n)); }
     function pick(n, m, el) {
       resp[QS[n].k] = QS[n].o[m];
       el.closest('.opts').querySelectorAll('.opt').forEach(b => b.classList.remove('picked'));
       el.classList.add('picked');
       const fala = QS[n].o[m].say || '';
-      const alvo = n + 1 < QS.length ? $('say' + (n + 1)) : $('sayF');
+      const nx = proxima(n);
+      const alvo = nx < QS.length ? $('say' + nx) : $('sayF');
       alvo.innerHTML = fala ? '<img src="../assets/ck-logo.jpg" alt=""><span>' + esc(fala) + '</span>' : '';
-      setTimeout(() => go(n + 1), 260);
+      setTimeout(() => go(nx), 260);
     }
+    // só conta respostas de perguntas que a pessoa realmente viu
+    const respValidas = () => QS.map((q, n) => vis(n) ? resp[q.k] : null).filter(Boolean);
 
     function indicacao() {
-      const r = Object.values(resp);
+      const r = respValidas();
       const pts = r.reduce((a, o) => a + (o.pts || 0), 0);
       const perto = r.some(o => o.perto);
       const bc = resp.local ? resp.local.bc : false;
@@ -238,8 +259,8 @@
       if (resp.como && resp.como.sozinho && pts <= 2 && !perto) plano = 1;
       if (perto && bc) plano = 3;
       let temp = resp.momento ? resp.momento.temp : 'M';
-      if (temp === 'M' && resp.sente && resp.sente.quente) temp = 'Q';
-      return 'CK' + plano + '-' + temp;
+      if (temp === 'M' && r.some(o => o.quente)) temp = 'Q';
+      return 'CK' + plano + '-' + temp + (r.some(o => o.reab) ? ' · REAB' : '');
     }
     function origemLink() {
       const u = new URLSearchParams(location.search);
@@ -253,6 +274,7 @@
       if (!v('f-nome') || v('f-whats').replace(/\D/g, '').length < 10) { $('err').hidden = false; return; }
       $('err').hidden = true;
       const a = k => resp[k] ? resp[k].t : 'Não respondeu';
+      const caneta = resp.meta && resp.meta.emag && resp.caneta ? '\n💉 *Caneta emagrecedora:* ' + resp.caneta.t : '';
       const msg =
 `Olá Caio! Fiz a aplicação no seu site. Minhas respostas:
 
@@ -263,8 +285,9 @@
 🎂 *Idade:* ${a('idade')}
 💪 *Tempo de treino:* ${a('tempo')}
 🪞 *Como me sinto com meu corpo:* ${a('sente')}
+🔥 *O que me fez buscar ajuda:* ${a('motivo')}
 🧩 *O que mais me atrapalha:* ${a('atrapalha')}
-🎯 *Meta para 3 meses:* ${a('meta')}
+🎯 *Meta para 3 meses:* ${a('meta')}${caneta}
 🩹 *Lesão ou condição de saúde:* ${a('saude')}
 📋 *Acompanhamento antes:* ${a('antes')}
 🤝 *Como imagino o acompanhamento:* ${a('como')}
