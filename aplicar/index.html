@@ -86,6 +86,7 @@
     .note{font-size:.78rem;color:var(--muted);line-height:1.5}
     .err{font-size:.8rem;color:#ff8a8a}
 
+    .hero-me{width:100%;max-height:34vh;object-fit:cover;object-position:center 18%;border-radius:16px;-webkit-mask-image:linear-gradient(180deg,#000 60%,transparent);mask-image:linear-gradient(180deg,#000 60%,transparent)}
     .me{display:flex;align-items:center;gap:12px}
     .me img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid var(--red)}
     .me div{font-size:.85rem;color:var(--muted);line-height:1.4}
@@ -107,10 +108,11 @@
     <main id="screens">
       <!-- boas-vindas -->
       <section class="screen active" id="welcome">
+        <img class="hero-me" src="../assets/caio-boasvindas.jpg" alt="Caio Kalfeltz no studio"/>
         <div class="kicker">Aplicação · CK Performance</div>
         <h1>Antes de montar qualquer treino, quero te conhecer.</h1>
         <p class="lead">Não tem resposta certa. Responde com sinceridade, porque é com isso que eu chego na nossa conversa sabendo de onde você parte e onde quer chegar.</p>
-        <div class="me"><img src="../assets/ck-logo.jpg" alt=""/><div><b>Caio Kalfeltz</b>Personal trainer. Eu mesmo leio cada aplicação.</div></div>
+        <div class="me"><img src="../assets/caio-perfil.jpg" alt=""/><div><b>Caio Kalfeltz</b>Personal trainer. Eu mesmo leio cada aplicação.</div></div>
         <button class="btn block" type="button" onclick="start()">Bora começar →</button>
         <div class="meta">Só toques nas respostas · uns 3 minutos</div>
       </section>
@@ -244,7 +246,7 @@
       const fala = QS[n].o[m].say || '';
       const nx = proxima(n);
       const alvo = nx < QS.length ? $('say' + nx) : $('sayF');
-      alvo.innerHTML = fala ? '<img src="../assets/ck-logo.jpg" alt=""><span>' + esc(fala) + '</span>' : '';
+      alvo.innerHTML = fala ? '<img src="../assets/caio-perfil.jpg" alt=""><span>' + esc(fala) + '</span>' : '';
       setTimeout(() => go(nx), 260);
     }
     // só conta respostas de perguntas que a pessoa realmente viu
