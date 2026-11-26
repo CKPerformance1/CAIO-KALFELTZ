@@ -66,6 +66,9 @@
     @keyframes spin{to{transform:rotate(360deg)}}
     .profile-name{font-family:var(--display);font-size:1.9rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;line-height:1}
     .profile-bio{font-size:.86rem;color:var(--muted);max-width:300px;line-height:1.55}
+    .profile-bio.about{max-width:360px;margin:10px auto 0;font-size:.95rem;color:#d9d2d2;line-height:1.6}
+    .profile-bio.about b{color:#fff;font-weight:600}
+    .about-loc{font-size:.8rem;color:var(--muted);margin-top:8px}
     .profile-role{font-size:.66rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--red-hi)}
     .bio-lines{list-style:none;display:inline-flex;flex-direction:column;gap:7px;margin-top:8px;text-align:left}
     .bio-lines li{display:flex;align-items:center;gap:10px;font-size:.92rem;font-weight:500;color:#ece6e6}
@@ -358,12 +361,8 @@
       <div class="avatar"><img src="assets/caio-perfil.jpg" alt="Caio Kalfeltz" width="106" height="106"/></div>
       <h1 class="profile-name">Caio Kalfeltz</h1>
       <p class="profile-role">Personal Trainer · CK Performance</p>
-      <ul class="bio-lines">
-        <li><span class="bio-ico" aria-hidden="true">📋</span>Avaliação + treino individualizado</li>
-        <li><span class="bio-ico" aria-hidden="true">🔄</span>Ajustes a cada ciclo</li>
-        <li><span class="bio-ico" aria-hidden="true">🤝</span>Você não treina sozinho</li>
-        <li><span class="bio-ico" aria-hidden="true">📍</span>Online ou presencial em BC</li>
-      </ul>
+      <p class="profile-bio about">Comecei a treinar aos 15, acima do peso e sem saber por onde começar. Errei muito sozinho, até ter um personal do meu lado e entender que <b>resultado vem de treino bem orientado</b>. Hoje é isso que eu faço: acompanho de perto quem quer evoluir, para não repetir os erros que eu cometi.</p>
+      <p class="about-loc">📍 Balneário Camboriú · online e presencial</p>
       <div class="bio-actions">
         <button class="bio-cta" type="button" onclick="openConsultoria()">👇 Quero minha vaga</button>
         <span class="badge">Garantia de 7 dias</span>
