@@ -25,7 +25,7 @@
   <link rel="icon" href="assets/ck-logo.jpg"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Saira+Condensed:wght@600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Saira+Condensed:wght@600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet"/>
   <script>document.documentElement.classList.add('js')</script>
   <style>
     :root{
@@ -183,6 +183,33 @@
     .testi::before{content:"“";position:absolute;top:-18px;right:10px;font-family:var(--display);font-size:7rem;font-weight:800;color:var(--red);opacity:.25;line-height:1}
     .testi-txt{font-size:.82rem;line-height:1.6;color:#e6dfdf;white-space:pre-line;margin:0;position:relative}
     .hl{color:var(--red-hi)}
+    /* ── QUEM É O CAIO ── */
+    .story{position:relative;display:flex;flex-direction:column;gap:30px;padding-left:22px}
+    .story::before{content:"";position:absolute;left:6px;top:8px;bottom:8px;width:2px;background:linear-gradient(var(--red),rgba(178,32,32,.15))}
+    .ch{position:relative;display:grid;grid-template-columns:44% 1fr;gap:16px;align-items:center}
+    .ch::before{content:"";position:absolute;left:-21px;top:50%;width:12px;height:12px;margin-top:-6px;border-radius:50%;background:var(--red-hi);box-shadow:0 0 0 4px rgba(226,58,58,.18)}
+    .ch.flip{grid-template-columns:1fr 44%}
+    .ch.flip .pol{order:2}
+    .pol{position:relative;background:#f4f1ec;padding:7px 7px 30px;border-radius:3px;box-shadow:0 14px 30px -12px rgba(0,0,0,.8);transform:rotate(-3deg)}
+    .ch.flip .pol{transform:rotate(3deg)}
+    .pol img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:2px}
+    .pol .tp{position:absolute;top:-10px;left:50%;width:58px;height:18px;margin-left:-29px;background:rgba(235,225,200,.85);transform:rotate(-5deg)}
+    .pol figcaption{position:absolute;left:0;right:0;bottom:4px;text-align:center;font-family:'Caveat',cursive;font-weight:700;font-size:1.15rem;color:#222}
+    .ch-n{font-size:.68rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--red-hi)}
+    .ch h3{font-family:var(--display);font-size:1.45rem;font-weight:800;text-transform:uppercase;line-height:1;margin:4px 0 6px}
+    .ch p{font-size:.88rem;color:#cfc7c7;line-height:1.5}
+    .ch p b{color:#fff;font-weight:600}
+    .big-n{font-family:var(--display);font-weight:800;font-size:2.6rem;line-height:.9;color:#fff}
+    .big-n small{font-size:1rem;color:var(--muted);margin-left:2px}
+    .hand-note{font-family:'Caveat',cursive;font-weight:700;font-size:1.2rem;color:var(--red-hi);margin-top:6px;line-height:1.1}
+    .ab{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+    .ab .pol:first-child{transform:rotate(-2.5deg)}.ab .pol:last-child{transform:rotate(2.5deg);outline:2px solid var(--red);outline-offset:-2px}
+    .story-quote{position:relative;margin-top:4px;padding:22px 18px;border-radius:18px;background:linear-gradient(135deg,rgba(178,32,32,.22),rgba(22,20,20,.9));border:1px solid rgba(226,58,58,.35)}
+    .story-quote q{display:block;font-family:var(--display);font-weight:800;font-size:1.6rem;text-transform:uppercase;line-height:1.02;quotes:none}
+    .story-quote p{font-size:.88rem;color:#d6cece;margin-top:10px;line-height:1.5}
+    .story-quote .hand-note{margin-top:10px}
+    .story-cta{margin-top:14px;width:100%;font-size:.95rem;font-weight:700;color:#fff;background:var(--red);border:none;border-radius:14px;padding:14px;cursor:pointer}
+
     .case{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:14px}
     .case::before{content:"";position:absolute;inset:-40% -20% auto;height:70%;background:radial-gradient(closest-side,rgba(178,32,32,.35),transparent);pointer-events:none}
     .case-head{position:relative;display:flex;flex-direction:column;gap:8px}
@@ -508,6 +535,46 @@
       <div class="eyebrow reveal" style="margin-top:6px">Mais feedbacks</div>
       <div class="testis reveal" id="testis"></div>
       <div class="testi-nav reveal"><span class="testi-hint">Arraste para o lado →</span><span class="testi-dots" id="testi-dots"></span></div>
+    </section>
+
+    <!-- ══ QUEM É O CAIO ══ -->
+    <section class="block" id="quem-sou">
+      <div class="reveal">
+        <div class="eyebrow">Prazer, Caio</div>
+        <h2 class="block-title">Eu já fui <span class="hl">o gordinho da turma</span></h2>
+      </div>
+      <div class="story">
+        <div class="ch reveal">
+          <figure class="pol"><span class="tp"></span><img src="assets/sobre/gordinho.jpg" alt="Caio criança" loading="lazy" style="object-position:center 8%"/><figcaption>eu 🙋‍♂️</figcaption></figure>
+          <div><span class="ch-n">Aos 15 anos</span><div class="big-n">65<small>kg</small></div><p>1,65 m. A primeira avaliação veio sem rodeio: <b>obesidade nível 2</b>. Eu estava cansado e querendo uma mudança.</p></div>
+        </div>
+        <div class="ch flip reveal">
+          <figure class="pol"><span class="tp"></span><img src="assets/sobre/magro.jpg" alt="Caio mais magro" loading="lazy" style="object-position:center 30%"/><figcaption>52 kg</figcaption></figure>
+          <div><span class="ch-n">Aí eu exagerei</span><div class="big-n">52<small>kg</small></div><p>Cortei comida e treinei no limite. A balança desceu 13 kg, mas eu <b>não evoluí. Só fiquei menor.</b></p></div>
+        </div>
+        <div class="ch reveal">
+          <figure class="pol"><span class="tp"></span><img src="assets/sobre/virada.jpg" alt="Caio na academia" loading="lazy" style="object-position:center 20%"/><figcaption>a virada</figcaption></figure>
+          <div><span class="ch-n">A virada</span><h3>Até que alguém me acompanhou</h3><p>Parei de adivinhar. Comecei a comer direito, treinar com método e ter <b>alguém do meu lado corrigindo cada detalhe</b>.</p><div class="hand-note">foi ali que eu decidi o que queria fazer da vida</div></div>
+        </div>
+        <div class="reveal">
+          <span class="ch-n">Do jeito certo</span><h3 class="ch" style="display:block;font-family:var(--display);font-size:1.45rem;font-weight:800;text-transform:uppercase;line-height:1;margin:4px 0 10px">Isso é <span class="hl">evoluir</span></h3>
+          <div class="ab">
+            <figure class="pol"><span class="tp"></span><img src="assets/sobre/costas-antes.jpg" alt="Costas antes" loading="lazy" style="object-position:center 20%"/><figcaption>antes</figcaption></figure>
+            <figure class="pol"><span class="tp"></span><img src="assets/sobre/costas-depois.jpg" alt="Costas depois" loading="lazy" style="object-position:center 20%"/><figcaption>depois</figcaption></figure>
+          </div>
+          <div class="hand-note" style="margin-top:12px">não era sobre ficar menor. era sobre ficar forte.</div>
+        </div>
+        <div class="ch flip reveal">
+          <figure class="pol"><span class="tp"></span><img src="assets/sobre/hoje.jpg" alt="Caio hoje" loading="lazy" style="object-position:center 30%"/><figcaption>hoje</figcaption></figure>
+          <div><span class="ch-n">O ciclo</span><h3>Hoje eu sou quem está do lado</h3><p>Corrigindo, ajustando, cobrando. <b>O mesmo que fizeram por mim.</b></p><div class="hand-note">de perto, sempre 👊</div></div>
+        </div>
+      </div>
+      <div class="story-quote reveal">
+        <q>Quero ser o <span class="hl">espelho</span> que eu tive.</q>
+        <p>Um método com a minha assinatura e o máximo de vidas transformadas pelo caminho. Se você se viu em alguma parte dessa história, esse é o sinal.</p>
+        <div class="hand-note">o gordinho da foto ia gostar de saber disso</div>
+        <button class="story-cta" type="button" onclick="openConsultoria()">Bora evoluir junto? →</button>
+      </div>
     </section>
 
     <!-- ══ PLANILHA x CONSULTORIA ══ -->
